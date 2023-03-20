@@ -313,7 +313,7 @@ BinarySearchTree<Key, Value>::iterator::operator==(
     const BinarySearchTree<Key, Value>::iterator& rhs) const
 {
     // TODO
-  return (current_->getItem() == rhs.current_->getItem())
+  return (current_->getItem() == rhs.current_->getItem());
 }
 
 /**
@@ -354,12 +354,13 @@ BinarySearchTree<Key, Value>::iterator::operator++()
     }
     else
     {
-      while (current_ == current_->getParent()->getRight()
+      while (current_ == current_->getParent()->getRight())
       {
         current_ = current_->getParent();
       }
     }
   }
+  return *this;
 } 
 
 
@@ -533,11 +534,11 @@ Node<Key, Value>* BinarySearchTree<Key, Value>::finderHelper(Node<Key, Value>* c
   }
   if (currNode->getKey() < k)
   {
-    return finderHelper(currNode->getLeft());
+    return finderHelper(currNode->getLeft(), k);
   }
   if (currNode->getKey() > k)
   {
-    return finderHelper(currNode->getRight());
+    return finderHelper(currNode->getRight(), k);
   }
   return currNode;
 }
@@ -554,7 +555,7 @@ void BinarySearchTree<Key, Value>::removeHelp(Node<Key, Value>* currNode)
   if (currNode->getLeft() == nullptr && currNode->getRight() == nullptr)
   {
     //no children
-    if (currNode->getParent->getLeft() == currNode)
+    if (currNode->getParent()->getLeft() == currNode)
     {
       currNode->getParent()->setLeft(nullptr);
     }
@@ -618,22 +619,19 @@ template<typename Key, typename Value>
 void BinarySearchTree<Key, Value>::remove(const Key& key)
 {
     // TODO
-  Node<Key, Value>* prevNode = root_;
   Node<Key, Value>* currNode = root_;
   while (currNode != nullptr)
   {
-    if (currNode->getKey() == keyValuePair.first)
+    if (currNode->getKey() == key)
     {
       removeHelp(currNode);
     }
-    else if (currNode->getKey() < keyValuePair.first)
+    else if (currNode->getKey() < key)
     {
-      prevNode = currNode;
       currNode = currNode->getLeft();
     }
     else
     {
-      prevNode = currNode;
       currNode = currNode->getRight();
     }
   }
