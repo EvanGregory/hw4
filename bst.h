@@ -583,8 +583,9 @@ void BinarySearchTree<Key, Value>::removeHelp(Node<Key, Value>* currNode)
     //both exist
     Node<Key, Value>* pred = predecessor(currNode);
     nodeSwap(currNode, pred);
-    //currNode and pred pointers should not update, so have to remove pred
-    removeHelp(pred);
+    //currNode and pred pointers update
+
+    removeHelp(currNode);
     return;
   }
   else
