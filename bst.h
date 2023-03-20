@@ -604,13 +604,16 @@ void BinarySearchTree<Key, Value>::removeHelp(Node<Key, Value>* currNode)
     {
       child->setParent(parent);
     }
-    if (currNode->getParent()->getLeft() == currNode)
+    if (parent != nullptr)
     {
-      parent->setLeft(child);
-    }
-    else
-    {
-      parent->setRight(child);
+      if (parent->getLeft() == currNode)
+      {
+        parent->setLeft(child);
+      }
+      else
+      {
+        parent->setRight(child);
+      }
     }
   }
   delete currNode;
