@@ -642,6 +642,7 @@ void BinarySearchTree<Key, Value>::remove(const Key& key)
     if (currNode->getKey() == key)
     {
       removeHelp(currNode);
+      return;
     }
     else if (currNode->getKey() < key)
     {
