@@ -313,7 +313,8 @@ BinarySearchTree<Key, Value>::iterator::operator==(
     const BinarySearchTree<Key, Value>::iterator& rhs) const
 {
     // TODO
-  return (current_->getKey() == rhs.current_->getKey());
+  //comparing the pointers themselves
+  return (this->current_ == rhs.current_);
 }
 
 /**
