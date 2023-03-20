@@ -622,6 +622,10 @@ void BinarySearchTree<Key, Value>::removeHelp(Node<Key, Value>* currNode)
         parent->setRight(child);
       }
     }
+    else
+    {
+      root_ = child;
+    }
   }
   delete currNode;
   return;
