@@ -313,7 +313,7 @@ BinarySearchTree<Key, Value>::iterator::operator==(
     const BinarySearchTree<Key, Value>::iterator& rhs) const
 {
     // TODO
-  return (current_->getItem() == rhs.current_->getItem());
+  return (current_->getKey() == rhs.current_->getKey());
 }
 
 /**
@@ -348,7 +348,11 @@ BinarySearchTree<Key, Value>::iterator::operator++()
   }
   else
   {
-    if (current_ == current_->getParent()->getLeft())
+    if (current_->getParent() == nullptr)
+    {
+      current_ = nullptr;
+    }
+    else if (current_ == current_->getParent()->getLeft())
     {
       current_ = current_->getParent();
     }
