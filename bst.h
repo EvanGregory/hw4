@@ -250,6 +250,7 @@ protected:
     virtual void destroyHelper(Node<Key, Value>* currNode);
     virtual void removeHelp(Node<Key, Value>* currNode);
     Node<Key, Value>* finderHelper(Node<Key, Value>* currNode, const Key& k) const;
+    int balancedHelper(Node<Key, Value>* currNode) const;
 
 protected:
     Node<Key, Value>* root_;
@@ -519,13 +520,11 @@ void BinarySearchTree<Key, Value>::insert(const std::pair<const Key, Value> &key
 
 }
 
-
-//Not yet declared
 /**
 Returns the node in currNode's subtree which contains Key k
 Returns nullptr if not found
 **/
-template<class Key, class Value>
+template<typename Key, typename Value>
 Node<Key, Value>* BinarySearchTree<Key, Value>::finderHelper(Node<Key, Value>* currNode, const Key& k) const
 {
   if (currNode == nullptr)
@@ -729,14 +728,52 @@ Node<Key, Value>* BinarySearchTree<Key, Value>::internalFind(const Key& key) con
   return finderHelper(root_, key);
 }
 
+
+template<typename Key, typename Value>
+int BinarySearchTree<Key, Value>::balancedHelper(Node<Key, Value>* currNode) const
+{
+  if (currNode == nullptr)
+  {
+    return 0;
+  }
+  int leftBal = balancedHelper(currNode->getLeft());
+  int rightBal = balancedHelper(currNode->getRight());
+  if (leftBal < 0 || rightBal < 0)
+  {
+    return -1;
+  }
+
+  //check difference in heights
+  int diff;
+  int hMax;
+  if (leftBal >= rightBal)
+  {
+    diff = leftBal - rightBal;
+    hMax = leftBal;
+  }
+  else
+  {
+    diff = rightBal - leftBal;
+    hMax = rightBal;
+  }
+  if (diff > 1)
+  {
+    //fail state
+    return -1;
+  }
+  //greater height is one that matters
+  return hMax + 1;
+
+}
+
 /**
- * Return true iff the BST is balanced.
+ * Return true if the BST is balanced.
  */
 template<typename Key, typename Value>
 bool BinarySearchTree<Key, Value>::isBalanced() const
 {
     // TODO
-  
+  return ( balancedHelper(root_) != -1 );
 }
 
 
