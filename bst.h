@@ -515,11 +515,11 @@ Node<Key, Value>* BinarySearchTree<Key, Value>::finderHelper(Node<Key, Value>* c
   }
   if (currNode->getKey() < k)
   {
-    return finderHelper(currNode->getLeft(), k);
+    return finderHelper(currNode->getRight(), k);
   }
   if (currNode->getKey() > k)
   {
-    return finderHelper(currNode->getRight(), k);
+    return finderHelper(currNode->getLeft(), k);
   }
   return currNode;
 }
