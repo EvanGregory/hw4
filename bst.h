@@ -562,13 +562,20 @@ void BinarySearchTree<Key, Value>::removeHelp(Node<Key, Value>* currNode)
   if (currNode->getLeft() == nullptr && currNode->getRight() == nullptr)
   {
     //no children
-    if (currNode->getParent()->getLeft() == currNode)
+    if (currNode->getParent() != nullptr)
     {
-      currNode->getParent()->setLeft(nullptr);
+      if (currNode->getParent()->getLeft() == currNode)
+      {
+        currNode->getParent()->setLeft(nullptr);
+      }
+      else
+      {
+        currNode->getParent()->setRight(nullptr);
+      }
     }
     else
     {
-      currNode->getParent()->setRight(nullptr);
+      root_ = nullptr;
     }
   }
   else if (currNode->getLeft() != nullptr && currNode->getRight() != nullptr)
@@ -596,7 +603,7 @@ void BinarySearchTree<Key, Value>::removeHelp(Node<Key, Value>* currNode)
     }
     else
     {
-      //delink parent
+      //Just safety, should not be possible case
       child = nullptr;
     }
     //link parent and child
