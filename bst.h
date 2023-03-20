@@ -357,6 +357,8 @@ BinarySearchTree<Key, Value>::iterator::operator++()
       while (current_ == current_->getParent()->getRight())
       {
         current_ = current_->getParent();
+        if (current_ == nullptr)
+          break;
       }
     }
   }
