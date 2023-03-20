@@ -362,7 +362,7 @@ BinarySearchTree<Key, Value>::iterator::operator++()
       while (current_ == current_->getParent()->getRight())
       {
         current_ = current_->getParent();
-        if (current_ == nullptr)
+        if (current_ == nullptr || current_->getParent() == nullptr)
           break;
       }
     }
