@@ -247,6 +247,7 @@ protected:
     virtual void nodeSwap( Node<Key,Value>* n1, Node<Key,Value>* n2 );
 
     // Add helper functions here
+    static Node<Key, Value>* successor(Node<Key, Value>* current);
     virtual void destroyHelper(Node<Key, Value>* currNode);
     virtual void removeHelp(Node<Key, Value>* currNode);
     Node<Key, Value>* finderHelper(Node<Key, Value>* currNode, const Key& k) const;
@@ -338,35 +339,8 @@ template<class Key, class Value>
 typename BinarySearchTree<Key, Value>::iterator&
 BinarySearchTree<Key, Value>::iterator::operator++()
 {
-    // TODO
-  if (current_->getRight() != nullptr)
-  {
-    current_ = current_->getRight();
-    while (current_->getLeft() != nullptr)
-    {
-      current_ = current_->getLeft();
-    }
-  }
-  else
-  {
-    if (current_->getParent() == nullptr)
-    {
-      current_ = nullptr;
-    }
-    else if (current_ == current_->getParent()->getLeft())
-    {
-      current_ = current_->getParent();
-    }
-    else
-    {
-      while (current_ == current_->getParent()->getRight())
-      {
-        current_ = current_->getParent();
-        if (current_ == nullptr || current_->getParent() == nullptr)
-          break;
-      }
-    }
-  }
+     //TODO
+  current_ = successor(current_);
   return *this;
 } 
 
@@ -700,6 +674,42 @@ BinarySearchTree<Key, Value>::predecessor(Node<Key, Value>* current)
   }
 }
 
+template<class Key, class Value>
+Node<Key, Value>*
+BinarySearchTree<Key, Value>::successor(Node<Key, Value>* current)
+{
+  // TODO
+  if (current == nullptr) return nullptr;
+
+  if (current->getRight() == nullptr)
+  { //go up until you go up right
+
+    while (true)
+    {
+      if (current->getParent() == nullptr)
+      {
+        return nullptr;
+      }
+      if (current->getParent()->getLeft() == current)
+      {
+        return current->getParent();
+      }
+      else
+      {
+        current = current->getParent();
+      }
+    }
+  }
+  else
+  { //go down right, then far left
+    current = current->getRight();
+    while (current->getLeft() != nullptr)
+    {
+      current = current->getLeft();
+    }
+    return current;
+  }
+}
 
 /**
 * A method to remove all contents of the tree and
