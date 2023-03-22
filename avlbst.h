@@ -254,6 +254,68 @@ template<class Key, class Value>
 void AVLTree<Key, Value>:: remove(const Key& key)
 {
     // TODO
+  AVLNode<Key, Value>* currNode = internalFind(key);
+  if (currNode == nullptr)
+  {
+    return;
+  }
+  AVLNode<Key, Value>* parent = currNode->getParent();
+
+  BinarySearchTree<Key, Value>::remove(currNode);
+  //begin loop
+
+  if (parent == nullptr)
+  {
+    return;
+  }
+  AVLNode<Key, Value>* grandParent = parent->getParent();
+
+  if (parent->getLeft() != nullptr && parent->getRight() != nullptr)
+  {
+    parent->setBalance(0);
+    return;
+  }
+  if (currNode == parent->getLeft())
+  {
+    parent->updateBalance(-1);
+  }
+  else
+  {
+    parent->updateBalance(1);
+  }
+  while (grandParent != nullptr)
+  {
+    if (parent == grandParent->getLeft())
+    {
+      grandParent->updateBalance(-1);
+    }
+    else
+    {
+      grandParent->updateBalance(1);
+    }
+
+    if (grandParent->getBalance() > 1)
+    {
+      if (currNode == parent->getLeft())
+      {
+        rotateRight(parent);
+      }
+      rotateLeft(grandParent);
+    }
+    else if (grandParent->getBalance() < -1)
+    {
+      if (currNode == parent->getRight())
+      {
+        rotateLeft(parent);
+      }
+      rotateRight(grandParent);
+    }
+
+    currNode = parent;
+    parent = grandParent;
+    grandParent = grandParent->getParent();
+  }
+
 }
 
 template<class Key, class Value>
