@@ -371,8 +371,7 @@ template<typename Key, typename Value>
 BinarySearchTree<Key, Value>::~BinarySearchTree()
 {
     // TODO
-  destroyHelper(root_);
-  root_ = nullptr;
+  clear();
 }
 
 template<typename Key, typename Value>
