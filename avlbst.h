@@ -324,7 +324,18 @@ void AVLTree<Key, Value>::rotateLeft(AVLNode<Key, Value>* head)
   AVLNode<Key, Value>* top = head->getRight();
 
   left->setRight(top->getLeft());
+  if (left->getRight() != nullptr)
+    left->getRight()->setParent(left);
   top->setParent(left->getParent());
+  if (top->getParent() != nullptr)
+  {
+    if (top->getParent()->getLeft() == left)
+      top->getParent()->setLeft(top);
+    else
+      top->getParent()->setRight(top);
+  }
+  else
+    BinarySearchTree<Key, Value>::root_ = top;
   top->setLeft(left);
   left->setParent(top);
 }
@@ -336,10 +347,24 @@ void AVLTree<Key, Value>::rotateRight(AVLNode<Key, Value>* head)
   AVLNode<Key, Value>* top = head->getLeft();
 
   right->setLeft(top->getRight());
+  if (right->getLeft() != nullptr)
+    right->getLeft()->setParent(right);
   top->setParent(right->getParent());
+  if (top->getParent() != nullptr)
+  {
+    if (top->getParent()->getLeft() == right)
+      top->getParent()->setLeft(top);
+    else
+      top->getParent()->setRight(top);
+  }
+  else
+    BinarySearchTree<Key, Value>::root_ = top;
   top->setRight(right);
   right->setParent(top);
 }
+
+
+//may be calling the wrong version of node swap in removehelp
 
 template<class Key, class Value>
 void AVLTree<Key, Value>::nodeSwap( AVLNode<Key,Value>* n1, AVLNode<Key,Value>* n2)
