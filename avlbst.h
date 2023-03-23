@@ -303,8 +303,8 @@ void AVLTree<Key, Value>:: remove(const Key& key)
     }
     else
     {
-      parent = grandparent;
-      grandparent = grandParent->getParent();
+      parent = grandParent;
+      grandParent = grandParent->getParent();
     }
   }
 
