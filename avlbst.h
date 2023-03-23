@@ -212,7 +212,7 @@ void AVLTree<Key, Value>::insert (const std::pair<const Key, Value> &new_item)
   {
     parent->updateBalance(1);
   }
-  if ()
+
   AVLNode<Key, Value>* grandParent = parent->getParent();
   while (grandParent != nullptr)
   {
