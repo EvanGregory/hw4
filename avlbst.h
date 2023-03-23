@@ -312,7 +312,7 @@ void AVLTree<Key, Value>:: remove(const Key& key)
 
 
 template<class Key, class Value>
-bool rotateP(AVLNode<Key, Value>* p, AVLNode<Key, Value>* c)
+bool AVLTree<Key, Value>::rotateP(AVLNode<Key, Value>* p, AVLNode<Key, Value>* c)
 {
   if (p->getBalance() > 1)
   {
