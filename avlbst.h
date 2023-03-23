@@ -318,6 +318,7 @@ bool AVLTree<Key, Value>::rotateP(AVLNode<Key, Value>* p, AVLNode<Key, Value>* c
   {
     if (c->getBalance() < 0)
     {
+
       rotateRight(c);
     }
     rotateLeft(p);
@@ -356,6 +357,8 @@ void AVLTree<Key, Value>::rotateLeft(AVLNode<Key, Value>* head)
     BinarySearchTree<Key, Value>::root_ = top;
   top->setLeft(left);
   left->setParent(top);
+  top->updateBalance(-1);
+  left->setBalance(0);
 }
 
 template<class Key, class Value>
@@ -379,6 +382,8 @@ void AVLTree<Key, Value>::rotateRight(AVLNode<Key, Value>* head)
     BinarySearchTree<Key, Value>::root_ = top;
   top->setRight(right);
   right->setParent(top);
+  top->updateBalance(1);
+  right->setBalance(0);
 }
 
 
