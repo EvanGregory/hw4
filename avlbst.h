@@ -139,7 +139,7 @@ protected:
     // Add helper functions here
     void rotateLeft(AVLNode<Key, Value>* head);
     void rotateRight(AVLNode<Key, Value>* head);
-
+    bool rotateP(AVLNode<Key, Value>* p, AVLNode<Key, Value>* c);
 };
 
 /*
@@ -177,6 +177,11 @@ void AVLTree<Key, Value>::insert (const std::pair<const Key, Value> &new_item)
     }
   }
   AVLNode<Key, Value>* temp = new AVLNode<Key, Value>(new_item.first, new_item.second, prevNode);
+  if (prevNode == nullptr)
+  {
+    BinarySearchTree<Key, Value>::root_ = temp;
+    return;
+  }
   if (prevNode->getKey() > new_item.first)
   {
     prevNode->setLeft(temp);
@@ -191,7 +196,8 @@ void AVLTree<Key, Value>::insert (const std::pair<const Key, Value> &new_item)
   //now balance
 
   AVLNode<Key, Value>* parent = currNode->getParent();
-  AVLNode<Key, Value>* grandParent = parent->getParent();
+  if (parent == nullptr)
+    return;
 
   if (parent->getLeft() != nullptr && parent->getRight() != nullptr)
   {
@@ -206,6 +212,8 @@ void AVLTree<Key, Value>::insert (const std::pair<const Key, Value> &new_item)
   {
     parent->updateBalance(1);
   }
+  if ()
+  AVLNode<Key, Value>* grandParent = parent->getParent();
   while (grandParent != nullptr)
   {
     if (parent == grandParent->getLeft())
@@ -219,22 +227,9 @@ void AVLTree<Key, Value>::insert (const std::pair<const Key, Value> &new_item)
 
     if (grandParent->getBalance() == 0)
       break;
-    if (grandParent->getBalance() > 1)
+    if (rotateP(grandParent, parent))
     {
-      if (currNode == parent->getLeft())
-      {
-        rotateRight(parent);
-      }
-      rotateLeft(grandParent);
-      break;
-    }
-    if (grandParent->getBalance() < -1)
-    {
-      if (currNode == parent->getRight())
-      {
-        rotateLeft(parent);
-      }
-      rotateRight(grandParent);
+      //if we did rotate, then break
       break;
     }
 
@@ -260,28 +255,37 @@ void AVLTree<Key, Value>:: remove(const Key& key)
   }
   AVLNode<Key, Value>* parent = currNode->getParent();
 
-  BinarySearchTree<Key, Value>::removeHelp(currNode);
-  //begin loop
 
   if (parent == nullptr)
   {
     return;
   }
-  AVLNode<Key, Value>* grandParent = parent->getParent();
-
-  if (parent->getLeft() != nullptr && parent->getRight() != nullptr)
+  AVLNode<Key, Value>* grandParent;
+  if (parent->getLeft() == currNode)
   {
-    parent->setBalance(0);
-    return;
-  }
-  if (currNode == parent->getLeft())
-  {
-    parent->updateBalance(-1);
+    parent->updateBalance(1);
+    if (parent->getRight() != nullptr)
+    {
+      parent = parent->getRight();
+    }
   }
   else
   {
-    parent->updateBalance(1);
+    parent->updateBalance(-1);
+    if (parent->getLeft() != nullptr)
+    {
+      parent = parent->getLeft();
+    }
   }
+  grandParent = parent->getParent();
+  BinarySearchTree<Key, Value>::removeHelp(currNode);
+
+  rotateP(grandParent, parent);
+  parent = parent->getParent();
+  grandParent = parent->getParent();
+
+  parent->setBalance(0);
+
   while (grandParent != nullptr)
   {
     if (parent == grandParent->getLeft())
@@ -293,28 +297,42 @@ void AVLTree<Key, Value>:: remove(const Key& key)
       grandParent->updateBalance(1);
     }
 
-    if (grandParent->getBalance() > 1)
+    if (rotateP(grandParent, parent))
     {
-      if (currNode == parent->getLeft())
-      {
-        rotateRight(parent);
-      }
-      rotateLeft(grandParent);
+      grandParent = parent->getParent();
     }
-    else if (grandParent->getBalance() < -1)
+    else
     {
-      if (currNode == parent->getRight())
-      {
-        rotateLeft(parent);
-      }
-      rotateRight(grandParent);
+      parent = grandparent;
+      grandparent = grandParent->getParent();
     }
-
-    currNode = parent;
-    parent = grandParent;
-    grandParent = grandParent->getParent();
   }
 
+}
+
+
+template<class Key, class Value>
+bool rotateP(AVLNode<Key, Value>* p, AVLNode<Key, Value>* c)
+{
+  if (p->getBalance() > 1)
+  {
+    if (c->getBalance() < 0)
+    {
+      rotateRight(c);
+    }
+    rotateLeft(p);
+  }
+  else if (p->getBalance() < -1)
+  {
+    if (c->getBalance() > 0)
+    {
+      rotateLeft(c);
+    }
+    rotateRight(p);
+  }
+  else
+    return false;
+  return true;
 }
 
 template<class Key, class Value>
