@@ -264,7 +264,7 @@ void AVLTree<Key, Value>:: remove(const Key& key)
       return;
     else
     {
-      parent = BinarySearchTree<Key, Value>::root_;
+      parent = static_cast<AVLNode<Key, Value>*>(BinarySearchTree<Key, Value>::root_);
       if (parent->getLeft() != nullptr)
         rotateP(parent, parent->getLeft());
       else if (parent->getRight() != nullptr)
