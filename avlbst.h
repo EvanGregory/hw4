@@ -267,15 +267,20 @@ void AVLTree<Key, Value>:: remove(const Key& key)
   if (parent->getLeft() != nullptr)
   {// if left exists, we deleted the right
     parent->updateBalance(-1);
-    //there is still one child, so overall tree balance is unaffected
+    rotateP(parent, parent->getLeft());
+    //there is still one child, so tree balance above parent is unaffected
     return;
   }
   else if (parent->getRight() != nullptr)
   {// if right exists, we deleted the left
     parent->updateBalance(1);
+    rotateP(parent, parent->getRight());
     return;
   }
-//no children, balance is harder
+
+ //no children, balance is harder
+
+
   currNode = parent;
   parent = parent->getParent();
   if (parent == nullptr)
