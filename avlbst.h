@@ -260,8 +260,17 @@ void AVLTree<Key, Value>:: remove(const Key& key)
 
   if (parent == nullptr)
   {
-    BinarySearchTree<Key, Value>::root_ = nullptr;
-    return;
+    if (BinarySearchTree<Key, Value>::root_ == nullptr)
+      return;
+    else
+    {
+      parent = BinarySearchTree<Key, Value>::root_;
+      if (parent->getLeft() != nullptr)
+        rotateP(parent, parent->getLeft());
+      else if (parent->getRight() != nullptr)
+        rotateP(parent, parent->getRight());
+      return;
+    }
   }
   AVLNode<Key, Value>* grandParent;
   if (parent->getLeft() != nullptr)
@@ -317,6 +326,8 @@ void AVLTree<Key, Value>:: remove(const Key& key)
 template<class Key, class Value>
 bool AVLTree<Key, Value>::rotateP(AVLNode<Key, Value>* p, AVLNode<Key, Value>* c)
 {
+  if (p == nullptr || c == nullptr)
+    return false;
   if (p->getBalance() > 1)
   {
     if (c->getBalance() < 0)
