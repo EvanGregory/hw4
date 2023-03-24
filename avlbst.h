@@ -318,18 +318,63 @@ bool AVLTree<Key, Value>::rotateP(AVLNode<Key, Value>* p, AVLNode<Key, Value>* c
   {
     if (c->getBalance() < 0)
     {
-
+      AVLNode<Key, Value>* grandC = c->getRight(); // must exist bc of balance factor
+      if (grandC->getBalance() == 1)
+      {
+        p->setBalance(-1);
+        c->setBalance(0);
+      }
+      else if (grandC->getBalance() == -1)
+      {
+        p->setBalance(0);
+        c->setBalance(1);
+      }
+      else
+      {
+        p->setBalance(0);
+        c->setBalance(0);
+      }
+      grandC->setBalance(0);
       rotateRight(c);
+      rotateLeft(p);
     }
-    rotateLeft(p);
+    else
+    {
+      p->setBalance(0);
+      c->setBalance(0);
+      rotateLeft(p);
+    }
   }
   else if (p->getBalance() < -1)
   {
     if (c->getBalance() > 0)
-    {
+    {//fix
+      AVLNode<Key, Value>* grandC = c->getLeft(); // must exist bc of balance factor
+      if (grandC->getBalance() == 1)
+      {
+        p->setBalance(0);
+        c->setBalance(-1);
+      }
+      else if (grandC->getBalance() == -1)
+      {
+        p->setBalance(1);
+        c->setBalance(0);
+      }
+      else
+      {
+        p->setBalance(0);
+        c->setBalance(0);
+      }
+      grandC->setBalance(0);
       rotateLeft(c);
+      rotateRight(p);
     }
-    rotateRight(p);
+    else
+    {
+      p->setBalance(0);
+      c->setBalance(0);
+      rotateRight(p);
+    }
   }
   else
     return false;
@@ -357,8 +402,6 @@ void AVLTree<Key, Value>::rotateLeft(AVLNode<Key, Value>* head)
     BinarySearchTree<Key, Value>::root_ = top;
   top->setLeft(left);
   left->setParent(top);
-  top->updateBalance(-1);
-  left->setBalance(0);
 }
 
 template<class Key, class Value>
@@ -382,8 +425,6 @@ void AVLTree<Key, Value>::rotateRight(AVLNode<Key, Value>* head)
     BinarySearchTree<Key, Value>::root_ = top;
   top->setRight(right);
   right->setParent(top);
-  top->updateBalance(1);
-  right->setBalance(0);
 }
 
 
