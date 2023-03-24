@@ -3,3 +3,5 @@ bst-test
 equal-paths-test
 *.o
 
+/.vs
+/Homework 4

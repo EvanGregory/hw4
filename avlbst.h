@@ -254,37 +254,35 @@ void AVLTree<Key, Value>:: remove(const Key& key)
     return;
   }
   AVLNode<Key, Value>* parent = currNode->getParent();
+  //deletion may ruin balance
+  BinarySearchTree<Key, Value>::removeHelp(currNode);
+  currNode = nullptr; // safety
 
-
+  if (parent == nullptr)
+  {
+    BinarySearchTree<Key, Value>::root_ = nullptr;
+    return;
+  }
+  AVLNode<Key, Value>* grandParent;
+  if (parent->getLeft() != nullptr)
+  {// if left exists, we deleted the right
+    parent->updateBalance(-1);
+    //there is still one child, so overall tree balance is unaffected
+    return;
+  }
+  else if (parent->getRight() != nullptr)
+  {// if right exists, we deleted the left
+    parent->updateBalance(1);
+    return;
+  }
+//no children, balance is harder
+  currNode = parent;
+  parent = parent->getParent();
   if (parent == nullptr)
   {
     return;
   }
-  AVLNode<Key, Value>* grandParent;
-  if (parent->getLeft() == currNode)
-  {
-    parent->updateBalance(1);
-    if (parent->getRight() != nullptr)
-    {
-      parent = parent->getRight();
-    }
-  }
-  else
-  {
-    parent->updateBalance(-1);
-    if (parent->getLeft() != nullptr)
-    {
-      parent = parent->getLeft();
-    }
-  }
   grandParent = parent->getParent();
-  BinarySearchTree<Key, Value>::removeHelp(currNode);
-
-  rotateP(grandParent, parent);
-  parent = parent->getParent();
-  grandParent = parent->getParent();
-
-  parent->setBalance(0);
 
   while (grandParent != nullptr)
   {
