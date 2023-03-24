@@ -318,7 +318,7 @@ bool AVLTree<Key, Value>::rotateP(AVLNode<Key, Value>* p, AVLNode<Key, Value>* c
   {
     if (c->getBalance() < 0)
     {
-      AVLNode<Key, Value>* grandC = c->getRight(); // must exist bc of balance factor
+      AVLNode<Key, Value>* grandC = c->getLeft(); // must exist bc of balance factor
       if (grandC->getBalance() == 1)
       {
         p->setBalance(-1);
@@ -349,7 +349,7 @@ bool AVLTree<Key, Value>::rotateP(AVLNode<Key, Value>* p, AVLNode<Key, Value>* c
   {
     if (c->getBalance() > 0)
     {//fix
-      AVLNode<Key, Value>* grandC = c->getLeft(); // must exist bc of balance factor
+      AVLNode<Key, Value>* grandC = c->getRight(); // must exist bc of balance factor
       if (grandC->getBalance() == 1)
       {
         p->setBalance(0);
